@@ -15,9 +15,9 @@
 #include <env.h>
 #include <fdt_support.h>
 #include <spl.h>
-#include "../common/fdt_ops.h"
+#include "../../ti/common/fdt_ops.h"
 
-#include "../common/k3-ddr-init.h"
+#include "../../ti/common/k3-ddr-init.h"
 
 ofnode cadence_qspi_get_subnode(struct udevice *dev)
 {
