@@ -1,0 +1,14 @@
+if TARGET_J722S_R5_BEAGLEYAI ||  TARGET_J722S_A53_BEAGLEYAI
+
+config SYS_BOARD
+    default "beagleyai"
+
+config SYS_VENDOR
+    default "beagle"
+
+config SYS_CONFIG_NAME
+    default "beagleyai"
+
+source "board/ti/common/Kconfig"
+
+endif
