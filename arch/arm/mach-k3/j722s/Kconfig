@@ -46,5 +46,6 @@ config TARGET_J722S_R5_BEAGLEYAI
 endchoice
 
 source "board/ti/j722s/Kconfig"
+source "board/beagle/beagleyai/Kconfig"
 
 endif
