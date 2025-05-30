@@ -15,9 +15,16 @@
 #include <env.h>
 #include <fdt_support.h>
 #include <spl.h>
-#include "../../ti/common/fdt_ops.h"
 
-#include "../../ti/common/k3-ddr-init.h"
+int dram_init(void)
+{
+	return fdtdec_setup_mem_size_base();
+}
+
+int dram_init_banksize(void)
+{
+	return fdtdec_setup_memory_banksize();
+}
 
 ofnode cadence_qspi_get_subnode(struct udevice *dev)
 {
@@ -109,7 +116,12 @@ void spl_perform_fixups(struct spl_image_info *spl_image)
 #if IS_ENABLED(CONFIG_BOARD_LATE_INIT)
 int board_late_init(void)
 {
-	ti_set_fdt_env(NULL, NULL);
+	char fdtfile[50];
+
+	snprintf(fdtfile, sizeof(fdtfile), "%s.dtb", CONFIG_DEFAULT_DEVICE_TREE);
+
+	env_set("fdtfile", fdtfile);
+
 	return 0;
 }
 #endif
