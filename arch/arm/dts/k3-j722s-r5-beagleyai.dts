@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * J722S EVM dts file for R5 SPL
+ * J722S BeagleY-AI dts file for R5 SPL
  * Copyright (C) 2024 Texas Instruments Incorporated - https://www.ti.com/
  */
 
-#include "k3-j722s-evm.dts"
-#include "k3-j722s-evm-u-boot.dtsi"
+#include "k3-j722s-beagleyai.dts"
+#include "k3-j722s-evm-u-boot.dtsi" // FIXME(blaw)
 
 #include "k3-am67a-beagley-ddr-lp4.dtsi"
 #include "k3-am62a-ddr.dtsi"
