@@ -85,21 +85,7 @@ int board_init(void)
 	return 0;
 }
 
-void spl_board_init(void)
-{
-	u32 val;
-
-	/* We have 32k crystal, so lets enable it */
-	val = readl(MCU_CTRL_LFXOSC_CTRL);
-	val &= ~(MCU_CTRL_LFXOSC_32K_DISABLE_VAL);
-	writel(val, MCU_CTRL_LFXOSC_CTRL);
-	/* Add any TRIM needed for the crystal here.. */
-	/* Make sure to mux up to take the SoC 32k from the crystal */
-	writel(MCU_CTRL_DEVICE_CLKOUT_LFOSC_SELECT_VAL,
-	       MCU_CTRL_DEVICE_CLKOUT_32K_CTRL);
-}
-
-#if defined(CONFIG_SPL_BUILD)
+#if defined(CONFIG_XPL_BUILD)
 void spl_perform_fixups(struct spl_image_info *spl_image)
 {
 	if (IS_ENABLED(CONFIG_K3_DDRSS)) {
@@ -123,5 +109,21 @@ int board_late_init(void)
 	env_set("fdtfile", fdtfile);
 
 	return 0;
+}
+#endif
+
+#if IS_ENABLED(CONFIG_SPL_BOARD_INIT)
+void spl_board_init(void)
+{
+	u32 val;
+
+	/* We have 32k crystal, so lets enable it */
+	val = readl(MCU_CTRL_LFXOSC_CTRL);
+	val &= ~(MCU_CTRL_LFXOSC_32K_DISABLE_VAL);
+	writel(val, MCU_CTRL_LFXOSC_CTRL);
+	/* Add any TRIM needed for the crystal here.. */
+	/* Make sure to mux up to take the SoC 32k from the crystal */
+	writel(MCU_CTRL_DEVICE_CLKOUT_LFOSC_SELECT_VAL,
+	       MCU_CTRL_DEVICE_CLKOUT_32K_CTRL);
 }
 #endif
