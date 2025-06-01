@@ -21,7 +21,6 @@
 		serial0 = &wkup_uart0;
 		serial2 = &main_uart0;
 		serial3 = &main_uart5;
-		mmc0 = &sdhci0;
 		mmc1 = &sdhci1;
 	};
 
@@ -967,10 +966,8 @@
 };
 
 &sdhci0 {
-	disable-wp;
-	bootph-all;
-	ti,driver-strength-ohm = <50>;
-	status = "okay";
+	/*eMMC*/
+	status = "disabled";
 };
 
 &sdhci1 {
