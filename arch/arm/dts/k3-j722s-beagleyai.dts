@@ -14,8 +14,8 @@
 #include "k3-serdes.h"
 
 / {
-	compatible = "ti,j722s-evm", "ti,j722s";
-	model = "Texas Instruments J722S EVM";
+	compatible =  "beagle,am67a-beagley-ai", "ti,j722s";
+	model = "BeagleBoard.org BeagleY-AI";
 
 	aliases {
 		serial0 = &wkup_uart0;
