@@ -976,10 +976,14 @@
 	vqmmc-supply = <&vdd_sd_dv>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_mmc1_pins_default>;
-	ti,driver-strength-ohm = <50>;
 	disable-wp;
-	status = "okay";
+	ti,driver-strength-ohm = <50>;
+	cd-gpios = <&main_gpio1 48 GPIO_ACTIVE_LOW>;
+	cd-debounce-delay-ms = <100>;
 	bootph-all;
+	ti,fails-without-test-cd;
+	status = "okay";
+	no-1-8-v;
 };
 
 &mailbox0_cluster0 {
