@@ -594,7 +594,19 @@
 	status = "okay";
 };
 
+&cpsw_port2 {
+	status = "disabled";
+};
+
+&main_gpio0 {
+	status = "okay";
+};
+
 &main_gpio1 {
+	status = "okay";
+};
+
+&mcu_gpio0 {
 	status = "okay";
 };
 
@@ -1143,10 +1155,6 @@ csi0_i2c: &main_i2c2 {
 	       0 0 0 0
 	       0 0 0 0
 	>;
-};
-
-&mcu_gpio0 {
-	status = "okay";
 };
 
 &mcu_i2c0 {
