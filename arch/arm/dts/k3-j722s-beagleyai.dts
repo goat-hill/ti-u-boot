@@ -21,6 +21,7 @@
 		serial0 = &wkup_uart0;
 		serial2 = &main_uart0;
 		mmc1 = &sdhci1;
+		rtc0 = &rtc;
 	};
 
 	chosen {
@@ -702,6 +703,11 @@
 				regulator-always-on;
 			};
 		};
+	};
+
+	rtc: rtc@68 {
+		compatible = "dallas,ds1340";
+		reg = <0x68>;
 	};
 };
 
