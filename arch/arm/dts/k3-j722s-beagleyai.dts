@@ -1115,10 +1115,15 @@
 };
 
 &pcie0_rc {
-	reset-gpios = <&exp1 18 GPIO_ACTIVE_HIGH>;
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pcie_pins_default>;
 	phys = <&serdes1_pcie_link>;
 	phy-names = "pcie-phy";
-	status = "okay";
+	num-lanes = <1>;
+	max-link-speed = <3>;
+	reset-gpios = <&mcu_gpio0 6 GPIO_ACTIVE_HIGH>;
+	enable-gpios = <&mcu_gpio0 8 GPIO_ACTIVE_HIGH>; /* Extra GPIO for pwr_en for BeagleY AI */
 };
 
 &usbss0 {
