@@ -20,6 +20,8 @@
 	aliases {
 		serial0 = &wkup_uart0;
 		serial2 = &main_uart0;
+		serial3 = &main_uart1;
+		serial6 = &main_uart6;
 		mmc1 = &sdhci1;
 		mmc2 = &sdhci2;
 		rtc0 = &rtc;
@@ -615,6 +617,28 @@
 	pinctrl-0 = <&main_uart0_pins_default>;
 	status = "okay";
 	bootph-all;
+};
+
+&main_uart1 {
+	symlink = "ttyAMA0";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart1_pins_default>;
+	status = "okay";
+	bootph-all;
+};
+
+&main_uart6 {
+	symlink = "board/bluetooth/uart";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_uart6_pins_default>;
+	status = "okay";
+	bootph-all;
+
+	bluetooth {
+		compatible = "ti,cc33xx-bt";
+		cc33xx-supply = <&wlan_en>;
+		max-speed = <115200>;
+	};
 };
 
 &main0_thermal {
