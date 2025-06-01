@@ -25,6 +25,7 @@
 		mmc1 = &sdhci1;
 		mmc2 = &sdhci2;
 		rtc0 = &rtc;
+		spi0 = &spi_gpio;
 	};
 
 	chosen {
