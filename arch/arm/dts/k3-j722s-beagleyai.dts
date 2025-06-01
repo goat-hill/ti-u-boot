@@ -26,6 +26,7 @@
 		mmc2 = &sdhci2;
 		rtc0 = &rtc;
 		spi0 = &spi_gpio;
+		i2c1 = &mcu_i2c0;
 	};
 
 	chosen {
