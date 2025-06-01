@@ -127,41 +127,40 @@
 		};
 	};
 
-	vmain_pd: regulator-0 {
-		/* TPS65988 PD CONTROLLER OUTPUT */
-		compatible = "regulator-fixed";
-		regulator-name = "vmain_pd";
-		regulator-min-microvolt = <5000000>;
-		regulator-max-microvolt = <5000000>;
-		regulator-always-on;
-		regulator-boot-on;
-		bootph-all;
-	};
-
-	vsys_5v0: regulator-vsys5v0 {
-		/* Output of LM5140 */
+	vsys_5v0: regulator-1 {
 		compatible = "regulator-fixed";
 		regulator-name = "vsys_5v0";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
-		vin-supply = <&vmain_pd>;
+		regulator-always-on;
+		regulator-boot-on;
+		bootph-all;
+	};
+
+	vdd_3v3: regulator-2 {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&vsys_5v0>;
 		regulator-always-on;
 		regulator-boot-on;
 	};
 
-	vdd_mmc1: regulator-mmc1 {
-		/* TPS22918DBVR */
+	vdd_mmc1: regulator-3 {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_mmc1";
+		pinctrl-names = "default";
+		pinctrl-0 = <&vdd_3v3_sd_pins_default>;
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		regulator-boot-on;
 		enable-active-high;
-		gpio = <&exp1 15 GPIO_ACTIVE_HIGH>;
+		gpio = <&main_gpio1 50 GPIO_ACTIVE_HIGH>;
 		bootph-all;
 	};
 
-	vdd_sd_dv: regulator-TLV71033 {
+	vdd_sd_dv: regulator-4 {
 		compatible = "regulator-gpio";
 		regulator-name = "tlv71033";
 		pinctrl-names = "default";
@@ -170,21 +169,13 @@
 		regulator-max-microvolt = <3300000>;
 		regulator-boot-on;
 		vin-supply = <&vsys_5v0>;
-		gpios = <&main_gpio0 70 GPIO_ACTIVE_HIGH>;
+		gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
 		states = <1800000 0x0>,
 			 <3300000 0x1>;
+		bootph-all;
 	};
 
-	vsys_io_3v3: regulator-vsys-io-3v3 {
-		compatible = "regulator-fixed";
-		regulator-name = "vsys_io_3v3";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		regulator-always-on;
-		regulator-boot-on;
-	};
-
-	vsys_io_1v8: regulator-vsys-io-1v8 {
+	vsys_io_1v8: regulator-5 {
 		compatible = "regulator-fixed";
 		regulator-name = "vsys_io_1v8";
 		regulator-min-microvolt = <1800000>;
@@ -193,7 +184,7 @@
 		regulator-boot-on;
 	};
 
-	vsys_io_1v2: regulator-vsys-io-1v2 {
+	vsys_io_1v2: regulator-6 {
 		compatible = "regulator-fixed";
 		regulator-name = "vsys_io_1v2";
 		regulator-min-microvolt = <1200000>;
@@ -202,42 +193,30 @@
 		regulator-boot-on;
 	};
 
-	codec_audio: sound {
+	sound0: sound {
 		compatible = "simple-audio-card";
-		simple-audio-card,name = "J722S-EVM";
-		simple-audio-card,widgets =
-			"Headphone",	"Headphone Jack",
-			"Line",		"Line In",
-			"Microphone",	"Microphone Jack";
-		simple-audio-card,routing =
-			"Headphone Jack",	"HPLOUT",
-			"Headphone Jack",	"HPROUT",
-			"LINE1L",		"Line In",
-			"LINE1R",		"Line In",
-			"MIC3R",		"Microphone Jack",
-			"Microphone Jack",	"Mic Bias";
-		simple-audio-card,format = "dsp_b";
-		simple-audio-card,bitclock-master = <&sound_master>;
-		simple-audio-card,frame-master = <&sound_master>;
-		simple-audio-card,bitclock-inversion;
+		simple-audio-card,name = "it66122 HDMI";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,bitclock-master = <&hdmi_dailink_master>;
+		simple-audio-card,frame-master = <&hdmi_dailink_master>;
 
-		simple-audio-card,cpu {
+		hdmi_dailink_master: simple-audio-card,cpu {
 			sound-dai = <&mcasp1>;
+			system-clock-direction-out;
 		};
 
-		sound_master: simple-audio-card,codec {
-			sound-dai = <&tlv320aic3106>;
-			clocks = <&audio_refclk1>;
+		simple-audio-card,codec {
+			sound-dai = <&it66122>;
 		};
 	};
 
 	hdmi0: connector-hdmi {
 		compatible = "hdmi-connector";
 		label = "hdmi";
-		type = "a";
+		type = "d";
 		port {
 			hdmi_connector_in: endpoint {
-				remote-endpoint = <&sii9022_out>;
+				remote-endpoint = <&it66122_out>;
 			};
 		};
 	};
@@ -661,85 +640,77 @@
 	status = "okay";
 	bootph-all;
 
-	tps65224: pmic@48 {
-		compatible = "ti,tps65224-q1";
-		reg = <0x48>;
+	tps65219: pmic@30 {
+		compatible = "ti,tps65219";
+		reg = <0x30>;
+		buck1-supply = <&vsys_5v0>;
+		buck2-supply = <&vsys_5v0>;
+		buck3-supply = <&vsys_5v0>;
+		ldo1-supply = <&vdd_3v3>;
+		ldo3-supply = <&vdd_3v3>;
+		ldo4-supply = <&vdd_3v3>;
+
 		pinctrl-names = "default";
 		pinctrl-0 = <&pmic_irq_pins_default>;
-		interrupt-parent = <&main_gpio0>;
-		interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
-		ti,primary-pmic;
+		interrupt-parent = <&gic500>;
+		interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
+		interrupt-controller;
+		#interrupt-cells = <1>;
 
-		gpio-controller;
-		#gpio-cells = <2>;
-
-		buck12-supply = <&vsys_io_3v3>;
-		buck3-supply = <&vsys_io_3v3>;
-		buck4-supply = <&vsys_io_3v3>;
-
-		ldo1-supply = <&vsys_io_3v3>;
-		ldo2-supply = <&vsys_io_3v3>;
-		ldo3-supply = <&vsys_io_3v3>;
+		bootph-all;
+		system-power-controller;
+		ti,power-button;
 
 		regulators {
-
-			buck1: buck1 {
-				regulator-name = "vcc1v8_io_buck1";
-				regulator-min-microvolt = <1800000>;
-				regulator-max-microvolt = <1800000>;
-				regulator-boot-on;
-				regulator-always-on;
-				bootph-all;
-			};
-
-			buck2: buck2 {
-				regulator-name = "vcc1v1_ddr_buck2";
-				regulator-min-microvolt = <1100000>;
-				regulator-max-microvolt = <1100000>;
-				regulator-boot-on;
-				regulator-always-on;
-			};
-
-			buck3: buck3 {
-				regulator-name = "vcc0v85_ram_buck3";
-				regulator-min-microvolt = <850000>;
-				regulator-max-microvolt = <850000>;
-				regulator-boot-on;
-				regulator-always-on;
-			};
-
-			buck4: buck4 {
-				regulator-name = "vcc0v75_ioret_buck4";
-				regulator-min-microvolt = <750000>;
-				regulator-max-microvolt = <750000>;
-				regulator-boot-on;
-				regulator-always-on;
-			};
-
-			ldo1: ldo1 {
-				regulator-name = "vdda1v8_pll_ldo1";
-				regulator-min-microvolt = <1800000>;
-				regulator-max-microvolt = <1800000>;
-				regulator-boot-on;
-				regulator-always-on;
-			};
-
-			ldo2: ldo2 {
-				regulator-name = "dvdd3v3_ldo2";
+			buck1_reg: buck1 {
+				regulator-name = "VDD_3V3";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-boot-on;
 				regulator-always-on;
 			};
 
-			ldo3: ldo3 {
-				regulator-name = "vdd1v85_phy_ldo3";
+			buck2_reg: buck2 {
+				regulator-name = "VDD_1V8";
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 				regulator-boot-on;
 				regulator-always-on;
 			};
-	       };
+
+			ldo1_reg: ldo1 {
+				regulator-name = "VDDSHV5_SDIO";
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+				regulator-allow-bypass;
+				regulator-boot-on;
+				regulator-always-on;
+			};
+
+			ldo2_reg: ldo2 {
+				regulator-name = "VDD_1V2";
+				regulator-min-microvolt = <1200000>;
+				regulator-max-microvolt = <1200000>;
+				regulator-boot-on;
+				regulator-always-on;
+			};
+
+			ldo3_reg: ldo3 {
+				regulator-name = "VDDA_PHY_1V8";
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+				regulator-boot-on;
+				regulator-always-on;
+			};
+
+			ldo4_reg: ldo4 {
+				regulator-name = "VDDA_PLL_1V8";
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+				regulator-boot-on;
+				regulator-always-on;
+			};
+		};
 	};
 };
 
@@ -800,94 +771,43 @@
 			line-name = "GPIO_AUD_RSTn";
 		};
 	};
-
-	tlv320aic3106: audio-codec@1b {
-		#sound-dai-cells = <0>;
-		compatible = "ti,tlv320aic3106";
-		reg = <0x1b>;
-		ai3x-micbias-vg = <1>;  /* 2.0V */
-		AVDD-supply = <&vsys_io_3v3>;
-		IOVDD-supply = <&vsys_io_3v3>;
-		DRVDD-supply = <&vsys_io_3v3>;
-		DVDD-supply = <&vsys_io_1v8>;
-	};
 };
 
 &main_i2c1 {
+	symlink = "hat/main_i2c1";
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&main_i2c1_pins_default>;
 	clock-frequency = <100000>;
+	bootph-all;
 
-	exp2: gpio@20 {
-		compatible = "ti,tca6416";
-		reg = <0x20>;
-		gpio-controller;
-		#gpio-cells = <2>;
-		gpio-line-names = "DSI_Mux_SEL_2", "GPIO_eDP_ENABLE",
-				  "DP0_PWR_SW_EN", "GPIO_OLDI_RSTn",
-				  "GPIO_HDMI_RSTn", "HDMI_LS_OE",
-				  "", "",
-				  "DSI_GPIO0", "DSI_GPIO1",
-				  "DSI_EDID", "IO_eDP_IRQ",
-				  "OLDI_INT#", "HDMI_INTn",
-				  "", "";
-
-		interrupt-parent = <&main_gpio0>;
-		interrupts = <67 IRQ_TYPE_EDGE_FALLING>;
-		interrupt-controller;
-		#interrupt-cells = <2>;
-
+	it66122: bridge-hdmi@4c {
+		compatible = "ite,it66122";
+		reg = <0x4c>;
 		pinctrl-names = "default";
-		pinctrl-0 = <&main_gpio0_ioexp_intr_pins_default>;
-		bootph-all;
-
-		p04-hog {
-			/* P04 - GPIO_HDMI_RSTn */
-			gpio-hog;
-			gpios = <4 GPIO_ACTIVE_LOW>;
-			output-low;
-			line-name = "GPIO_HDMI_RSTn";
-		};
-
-		p03-hog {
-			/* P03 - GPIO_OLDI_RSTn */
-			gpio-hog;
-			gpios = <3 GPIO_ACTIVE_LOW>;
-			output-low;
-			line-name = "GPIO_OLDI_RSTn";
-		};
-
-		p05-hog {
-			/* P05 - HDMI_LS_OE */
-			gpio-hog;
-			gpios = <5 GPIO_ACTIVE_HIGH>;
-			output-high;
-			line-name = "HDMI_LS_OE";
-		};
-	};
-
-	sii9022: bridge-hdmi@3b {
-		compatible = "sil,sii9022";
-		reg = <0x3b>;
-		interrupt-parent = <&exp2>;
-		interrupts = <13 IRQ_TYPE_EDGE_FALLING>;
+		pinctrl-0 = <&hdmi_gpio_pins_default>;
+		vcn33-supply = <&vdd_3v3>;
+		vcn18-supply = <&buck2_reg>;
+		vrf12-supply = <&ldo2_reg>;
+		reset-gpios = <&mcu_gpio0 13 GPIO_ACTIVE_LOW>;
+		interrupt-parent = <&mcu_gpio0>;
+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
 		#sound-dai-cells = <0>;
-		sil,i2s-data-lanes = < 0 >;
 
-		hdmi_tx_ports: ports {
+		ports {
 			#address-cells = <1>;
 			#size-cells = <0>;
 
 			/*
 			 * HDMI can be serviced with 3 potential VPs -
 			 * (DSS0 VP1 / DSS1 VP0 / DSS1 VP1).
-			 * For now, we will service it with DSS1 VP0.
+			 * For now, we will service it with DSS0 VP1.
 			 */
 			port@0 {
 				reg = <0>;
 
-				sii9022_in: endpoint {
+				it66122_in: endpoint {
+					bus-width = <24>;
 					remote-endpoint = <&dss1_dpi0_out>;
 				};
 			};
@@ -895,7 +815,7 @@
 			port@1 {
 				reg = <1>;
 
-				sii9022_out: endpoint {
+				it66122_out: endpoint {
 					remote-endpoint = <&hdmi_connector_in>;
 				};
 			};
@@ -1266,12 +1186,12 @@
 };
 
 &dss1_ports {
-	/* DSS1-VP0: DPI/HDMI Output */
+	/* DSS1-VP1: DPI/HDMI Output */
 	port@0 {
 		reg = <0>;
 
 		dss1_dpi0_out: endpoint {
-			remote-endpoint = <&sii9022_in>;
+			remote-endpoint = <&it66122_in>;
 		};
 	};
 };
