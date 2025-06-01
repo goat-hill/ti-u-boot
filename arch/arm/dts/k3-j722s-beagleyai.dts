@@ -225,6 +225,24 @@
 		status = "okay";
 	};
 
+	mipi_switch: mipi-switch {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&mipi_switch_pins>;
+
+		oe-pin {
+			label = "MIPI_SWITCH_OE";
+			gpios = <&main_gpio0 1 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+		};
+
+		sel-pin {
+			label = "MIPI_SWITCH_SEL";
+			gpios = <&main_gpio0 2 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
+
 	hdmi0: connector-hdmi {
 		compatible = "hdmi-connector";
 		label = "hdmi";
