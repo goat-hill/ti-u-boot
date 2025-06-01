@@ -231,28 +231,6 @@
 		};
 	};
 
-	transceiver0: can-phy0 {
-		compatible = "ti,tcan1042";
-		#phy-cells = <0>;
-		max-bitrate = <5000000>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&mcu_mcan0_gpio_pins_default>;
-		standby-gpios = <&mcu_gpio0 12 GPIO_ACTIVE_HIGH>;
-	};
-
-	transceiver1: can-phy1 {
-		compatible = "ti,tcan1042";
-		#phy-cells = <0>;
-		max-bitrate = <5000000>;
-	};
-
-	transceiver2: can-phy2 {
-		compatible = "ti,tcan1042";
-		#phy-cells = <0>;
-		max-bitrate = <5000000>;
-		standby-gpios = <&exp1 17 GPIO_ACTIVE_HIGH>;
-	};
-
 	hdmi0: connector-hdmi {
 		compatible = "hdmi-connector";
 		label = "hdmi";
@@ -1262,27 +1240,6 @@
 	       0 0 0 0
 	       0 0 0 0
 	>;
-};
-
-&mcu_mcan0 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&mcu_mcan0_pins_default>;
-	phys = <&transceiver0>;
-	status = "okay";
-};
-
-&mcu_mcan1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&mcu_mcan1_pins_default>;
-	phys = <&transceiver1>;
-	status = "okay";
-};
-
-&main_mcan0 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&main_mcan0_pins_default>;
-	phys = <&transceiver2>;
-	status = "okay";
 };
 
 &mcu_gpio0 {
