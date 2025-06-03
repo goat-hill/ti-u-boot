@@ -7,7 +7,7 @@
  */
 
 #ifndef SPL_J722S_EVM_DTB
-#define SPL_J722S_EVM_DTB "spl/dts/k3-am67a-beagley-ai.dtb"
+#define SPL_J722S_EVM_DTB "spl/dts/k3-am67a-beagleyai.dtb"
 #endif
 
 #include "k3-j722s-binman.dtsi"
