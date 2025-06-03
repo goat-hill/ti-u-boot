@@ -4,8 +4,8 @@
  * Copyright (C) 2024 Texas Instruments Incorporated - https://www.ti.com/
  */
 
-#include "k3-j722s-beagleyai.dts"
-#include "k3-am67a-beagley-ai-u-boot.dtsi"
+#include "k3-am67a-beagleyai.dts"
+#include "k3-am67a-beagleyai-u-boot.dtsi"
 
 #include "k3-am67a-beagley-ddr-lp4.dtsi"
 #include "k3-am62a-ddr.dtsi"
