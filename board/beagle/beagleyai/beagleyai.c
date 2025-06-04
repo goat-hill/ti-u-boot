@@ -7,6 +7,7 @@
  */
 
 #include <asm/arch/hardware.h>
+#include <asm/arch/k3-ddr.h>
 #include <asm/gpio.h>
 #include <asm/io.h>
 #include <dm.h>
