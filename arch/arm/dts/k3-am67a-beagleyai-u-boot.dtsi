@@ -6,6 +6,8 @@
  * Copyright (C) 2024 Robert Nelson, BeagleBoard.org Foundation
  */
 
+#include "k3-binman.dtsi"
+
 / {
 	chosen {
 		stdout-path = "serial2:115200n8";
