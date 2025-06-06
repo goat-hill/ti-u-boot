@@ -197,7 +197,7 @@
 					};
 
 					spl_beagley_ai_dtb: blob-ext {
-						filename = "spl/dts/ti/k3-am67a-beagleyai.dtb";
+						filename = "spl/dts/k3-am67a-beagleyai.dtb";
 					};
 
 				};
