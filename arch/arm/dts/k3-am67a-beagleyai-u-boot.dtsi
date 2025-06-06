@@ -6,12 +6,6 @@
  * Copyright (C) 2024 Robert Nelson, BeagleBoard.org Foundation
  */
 
-#ifndef SPL_J722S_EVM_DTB
-#define SPL_J722S_EVM_DTB "spl/dts/k3-am67a-beagleyai.dtb"
-#endif
-
-#include "k3-j722s-binman.dtsi"
-
 / {
 	chosen {
 		stdout-path = "serial2:115200n8";
@@ -57,50 +51,7 @@
 	status = "disabled";
 };
 
-/*
-// Unused from EVM
-
-&dmsc {
-	bootph-pre-ram;
+&main_gpio1 {
+	bootph-all;
 };
 
-&wkup_conf {
-	cpsw_mac_syscon: ethernet-mac-syscon@200 {
-		compatible = "ti,am62p-cpsw-mac-efuse", "syscon";
-		reg = <0x200 0x8>;
-	};
-};
-
-&cpsw_port1 {
-	ti,syscon-efuse = <&cpsw_mac_syscon 0x0>;
-};
-
-&main_bcdma {
-	bootph-pre-ram;
-	reg = <0x00 0x485c0100 0x00 0x100>,
-	      <0x00 0x4c000000 0x00 0x20000>,
-	      <0x00 0x4a820000 0x00 0x20000>,
-	      <0x00 0x4aa40000 0x00 0x20000>,
-	      <0x00 0x4bc00000 0x00 0x100000>,
-	      <0x00 0x48600000 0x00 0x8000>,
-	      <0x00 0x484a4000 0x00 0x2000>,
-	      <0x00 0x484c2000 0x00 0x2000>;
-	reg-names = "gcfg", "bchanrt", "rchanrt", "tchanrt",
-		    "ringrt", "cfg", "tchan", "rchan";
-};
-
-&usb0_phy_ctrl {
-	bootph-pre-ram;
-};
-
-&ospi0 {
-	flash@0 {
-		cdns,phy-mode;
-	};
-
-	ospi0_nand {
-		cdns,phy-mode;
-	};
-};
-
- */
