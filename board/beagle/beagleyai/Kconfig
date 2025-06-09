@@ -12,3 +12,10 @@ config SYS_CONFIG_NAME
 source "board/ti/common/Kconfig"
 
 endif
+
+if TARGET_J722S_R5_BEAGLEYAI
+
+config SPL_LDSCRIPT
+	default "arch/arm/mach-omap2/u-boot-spl.lds"
+
+endif
